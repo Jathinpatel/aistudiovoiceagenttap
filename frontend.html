@@ -393,6 +393,7 @@
         <div class="section-title">API Connection</div>
         <label for="apiUrl">API Base URL</label>
         <input id="apiUrl" type="text" />
+        <p class="hint">Use the app base URL like <code>https://bfhl-node-hierarchy.onrender.com</code>. If you paste a full <code>/bfhl</code> URL, it will be normalized automatically.</p>
       </section>
 
       <section class="card">
@@ -515,6 +516,10 @@
       return "http://127.0.0.1:3000";
     }
 
+    function normalizeApiBase(value) {
+      return value.trim().replace(/\/bfhl\/?$/i, "").replace(/\/$/, "");
+    }
+
     function renderTree(treeObject, indent) {
       if (!treeObject || Object.keys(treeObject).length === 0) {
         return "";
@@ -547,7 +552,9 @@
 
     async function submitData() {
       const raw = inputEl.value;
-      const apiBase = apiUrlEl.value.trim().replace(/\/$/, "");
+      const apiBase = normalizeApiBase(apiUrlEl.value);
+
+      apiUrlEl.value = apiBase;
 
       hideFeedback();
       hideResults();
